@@ -6,10 +6,11 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "npx nest build",
-    "start": "node dist/main.js",
-    "start:dev": "npx nest start --watch",
+     "prebuild": "rm -rf dist",
+  "build": "nest build",
+  "start": "node dist/main.js",
+  "start:dev": "nest start --watch",
+    
     "start:prod": "node dist/src/main.js",
     "migration:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d database/data-source.ts",
     "migration:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d database/data-source.ts",
