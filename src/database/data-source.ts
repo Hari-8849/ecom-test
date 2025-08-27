@@ -1,30 +1,25 @@
+import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { config } from 'dotenv';
+import * as dotenv from 'dotenv';
 import { User } from '../users/entities/user.entity';
 import { Role } from '../roles/entities/role.entity';
 
-config();
-
-const isProduction = process.env.NODE_ENV === 'production';
+dotenv.config();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  url: isProduction ? process.env.DATABASE_URL : undefined,
-
-  // Local dev settings (only used if not production)
-  host: !isProduction ? process.env.DB_HOST : undefined,
-  port: !isProduction ? parseInt(process.env.DB_PORT ?? '5432', 10) : undefined,
-  username: !isProduction ? process.env.DB_USERNAME : undefined,
-  password: !isProduction ? process.env.DB_PASSWORD : undefined,
-  database: !isProduction ? process.env.DB_NAME : undefined,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 5432,
+  username: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 
   entities: [User, Role],
-  migrations: [
-    isProduction ? 'dist/database/migrations/*.js' : 'src/database/migrations/*.ts',
-  ],
+  migrations: ['src/database/migrations/*{.ts,.js}'],
+  synchronize: false,
+  logging: true,
 
-  synchronize: false, // always false for safety
-  ssl: isProduction
-    ? { rejectUnauthorized: false } // Render requires SSL
-    : false,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });

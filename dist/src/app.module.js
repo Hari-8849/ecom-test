@@ -27,16 +27,20 @@ exports.AppModule = AppModule = __decorate([
                 useFactory: (config) => ({
                     type: 'postgres',
                     host: config.get('DB_HOST'),
-                    port: config.get('DB_PORT'),
+                    port: parseInt(config.get('DB_PORT'), 10),
                     username: config.get('DB_USERNAME'),
                     password: config.get('DB_PASSWORD'),
                     database: config.get('DB_NAME'),
-                    autoLoadEntities: true,
+                    entities: [__dirname + '/**/*.entity{.ts,.js}'],
                     synchronize: false,
+                    autoLoadEntities: true,
+                    ssl: config.get('DB_HOST') !== 'localhost'
+                        ? { rejectUnauthorized: false }
+                        : undefined,
                 }),
             }),
             roles_module_1.RolesModule,
-            users_module_1.UsersModule
+            users_module_1.UsersModule,
         ],
     })
 ], AppModule);
